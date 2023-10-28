@@ -224,7 +224,7 @@ const NuevoProductoPage = () => {
                         </p>
                     )}
                     <Link
-                        href="/clientes"
+                        href="/productos"
                         className="font-medium text-primary-600 hover:underline dark:text-primary-500 text-right"
                     >
                         Volver
