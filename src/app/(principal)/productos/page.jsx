@@ -7,7 +7,7 @@ import {clienteAxios} from "@/config/clienteAxios"
 
 const ProductosPage = () => {
     //* A pesar de que usamos las funciones del cliente en el context, "useContext" necesita "use client"
-    const { productos, confirmarEliminarProducto, setProductos } = UseAlmacen(); //! Esto es del cliente
+    const { productosData, confirmarEliminarProducto, setProductosData } = UseAlmacen(); //! Esto es del cliente
     
     //! El llamado de los datos en el mismo modulo es importante
     useEffect(() => {
@@ -19,13 +19,15 @@ const ProductosPage = () => {
                     }
                 }
                 const { data } = await clienteAxios('/productos', config)
-                setProductos(data)
+                // console.log(data);
+                setProductosData(data)
             } catch (error) {
                 console.log(error)
             }
         }
         obtenerProductos()
-    })
+    }, [setProductosData])//!Importante
+    // console.log(productosData);
 
     return (
         <>
@@ -50,8 +52,8 @@ const ProductosPage = () => {
                     </thead>
 
                     <tbody className="text-black font-medium text-center">
-                        {productos && productos.length
-                            ? productos.map((producto) => (
+                        {productosData && productosData.length
+                            ? productosData.map((producto) => (
                                     <Productos
                                         key={producto.id}
                                         producto={producto}

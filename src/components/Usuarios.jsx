@@ -1,58 +1,17 @@
-"use client"
-import {clienteAxios} from "@/config/clienteAxios"
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 import Link from "next/link";
 
-const MySwal = withReactContent(Swal)
-
-
-const Cliente = ({ cliente, setClientes, clientes }) => {
-    //! Recuerda que para proyectos grandes, usar el context.
-
-    const { nombre, apellido, email, telefono, id } = cliente;
-
-    const confirmarEliminarCliente = () => {
-        MySwal.fire({
-            title: "¿Deseas eliminar a este cliente?",
-            text: "Esta acción no se puede deshacer",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Si, Eliminar",
-            cancelButtonText: "No, Cancelar",
-        }).then(async(result) => {
-            if (result.value) {
-                try {
-                    const config = {
-                        headers: {
-                            "Content-Type": "application/json",
-                        }
-                    }
-                    // Eliminar por ID
-                    await clienteAxios.delete(`/clientes/${id}`, config);
-                    
-                    //Actualizar en el State
-                    const clientesActualizados = clientes.filter(clienteState => clienteState.id !== id);
-                    setClientes(clientesActualizados)
-                    MySwal.fire("Eliminado correctamente!", "success");
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        });
-    }
+const Usuarios = ({usuario, confirmarEliminarUsuario}) => {
+    const { nombre, apellido, email, admin, id } = usuario;
 
     return (
         <tr className="bg-slate-300">
             <td className="border border-gray-400 px-4 py-2">{nombre}</td>
             <td className="border border-gray-400 px-4 py-2">{apellido}</td>
             <td className="border border-gray-400 px-4 py-2">{email}</td>
-            <td className="border border-gray-400 px-4 py-2">{telefono}</td>
+            <td className="border border-gray-400 px-4 py-2">{admin ? "Administrador" : "Trabajador"}</td>
             <td className="border border-gray-400 px-4 py-2">
                 <Link
-                    href={`/clientes/${id}`}
+                    href={`/usuarios/${id}`}
                     className="flex justify-center items-center bg-green-600 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
                 >
                     Editar
@@ -73,7 +32,7 @@ const Cliente = ({ cliente, setClientes, clientes }) => {
                 <button
                     type="button"
                     className="flex justify-center items-center bg-red-800 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
-                    onClick={() => confirmarEliminarCliente()}
+                    onClick={() => confirmarEliminarUsuario(id)}
                 >
                     Eliminar
                     <svg
@@ -91,5 +50,5 @@ const Cliente = ({ cliente, setClientes, clientes }) => {
             </td>
         </tr>
     );
-};
-export default Cliente;
+}
+export default Usuarios

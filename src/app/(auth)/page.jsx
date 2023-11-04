@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { authAxios } from "@/config/clienteAxios";
+import { authAxios, authAxiosFromNext } from "@/config/clienteAxios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Spinner from "@/components/Spinner";
@@ -33,16 +33,15 @@ export default function Home() {
     const onSubmit = handleSubmit(async(datos) => {
         const {email, password: contraseña}=datos;
         try {
-            const {data} = await authAxios.post("/login", {email, contraseña});
-            // console.log(data);
-            if(data){
-                setLoading(true)
-                reset();
-                setTimeout(() => {
-                    setLoading(false);
-                    router.push("/menu");
-                }, 3000);
-            }
+            const {data: isAdmin} = await authAxios.post("/login", {email, contraseña});
+            //*Auth from next
+            await authAxiosFromNext.post("/login", {email, contraseña, isAdmin});
+            setLoading(true)
+            reset();
+            setTimeout(() => {
+                setLoading(false);
+                router.push("/menu");
+            }, 3000);
         } catch (error) {
             // console.log(error);
             // console.log(error?.response?.data?.contraseña);//!RESPUESTA DEL BACKEND

@@ -38,6 +38,7 @@ const ClientesPage = () => {
         };
         obtenerClientes();
     }, []);
+    // console.log(clientes);
     //* ENTONCES CUANDO USAR CONTEXT?, PARA LAS FUNCIONES DE ELIMINAR O ACTUALIZAR CON EL FIN DE TENERLOS DE MANERA INMEDIATA.
 
     return (
@@ -49,7 +50,7 @@ const ClientesPage = () => {
             >
                 Nuevo Cliente
             </Link>
-            <div className="overflow-x-scroll md:overflow-hidden">
+            <div className="overflow-x-scroll md:overflow-hidden mb-14">
                 <table className="table-auto shadow-md mt-10 w-full w-lg ">
                     <thead className="bg-blue-800">
                         <tr className="text-white ">

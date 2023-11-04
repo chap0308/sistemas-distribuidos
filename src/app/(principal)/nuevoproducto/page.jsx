@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { clienteAxios } from "@/config/clienteAxios";
+import { clienteAxios, uploadAxiosFromNext } from "@/config/clienteAxios";
 import { toast } from "react-toastify";
 import Link from "next/link";
 
@@ -28,14 +28,38 @@ const NuevoProductoPage = () => {
         },
         mode: "onBlur",
         reValidateMode: "onChange",
+
     });
 
     const onSubmit = handleSubmit(async (datos) => {
+        // console.log(datos.imagen[0])
+        // const file = datos.imagen[0]
+        // return
         // console.log(datos.imagen[0].name);
         const { imagen, ...rest } =datos;
         rest.imagen = imagen[0].name;
+        // const formData = new FormData();
+        // formData.append('file', file)
         try {
+            // const config = {
+            //     headers: {
+            //         "Content-Type": "multipart/form-data",
+            //         "Content-Type": "application/json",
+            //     }
+            // }
+            // await uploadAxiosFromNext.post("/upload", datos, config);
+
+            // const response = await fetch("/api/upload",{
+            //     method: "POST",
+            //     body: formData,
+            //     headers: {
+            //         "Content-Type": "multipart/form-data",
+            //     },
+            // });
+            // const nuevosDatos = await response.json();
             const { data } = await clienteAxios.post("/productos", rest);
+
+            
             if (data) {
                 toast.success(
                     "Producto registrado correctamente, redireccionando...",
