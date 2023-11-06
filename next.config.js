@@ -2,7 +2,12 @@
 const nextConfig = {
     images: {
         formats: ["image/avif", "image/webp"],
-        domains: ['cdn.icon-icons.com']
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "cdn.icon-icons.com",
+            },
+        ],
     }, 
 }
 

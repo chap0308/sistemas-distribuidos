@@ -1,23 +1,29 @@
 import { NextResponse } from "next/server";
+import { writeFile } from "fs/promises";
+import path from "path";
+
 
 export async function POST(request){
-    // console.log(request.body);
-    
-    // const data = await request.formData();
-    // console.log(data);
-    
-    // const image = data.get('file');
-    // console.log(image);
-    
-    const res = await request.json({
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Content-Type": "multipart/form-data"
-        }
-    })
-    console.log(res);
-    
+        
+    // const datos = await request.json();
+    // console.log(datos);
 
-    return NextResponse.json("imagen subida");
+    const data = await request.formData();
+    const image = data.get("file");
+    // console.log(image);
+    if (!image) {
+        return NextResponse.json("No se ha subido ninguna imagen", {
+            status: 400,
+        });
+    }
+    const bytes = await image.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    const filePath = path.join(process.cwd(), "public/uploads", image.name);
+    await writeFile(filePath, buffer);
+
+    return NextResponse.json({
+        message: "Imagen subida correctamente",
+        status: 200,
+    });
 }

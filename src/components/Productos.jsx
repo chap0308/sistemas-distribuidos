@@ -9,7 +9,7 @@ const Productos = ({ producto, confirmarEliminarProducto }) => {
         <tr className='bg-slate-300'>
             <td className="border border-gray-400 px-4 py-2 uppercase">{descripcion}</td>
             <td className="border border-gray-400">
-                <Image className='w-[140px] mx-auto' src={`/img/${imagen}`} alt="imagen" width={100} height={80} priority={true}/>
+                <Image className='w-[140px] mx-auto' src={`/uploads/${imagen}`} alt="imagen" width={100} height={80} priority={true}/>
             </td>
             <td className="border border-gray-400 px-4 py-2">{precio}</td>
             <td className="border border-gray-400 px-4 py-2">{stock}</td>
@@ -36,7 +36,7 @@ const Productos = ({ producto, confirmarEliminarProducto }) => {
                 <button
                     type="button"
                     className="flex justify-center items-center bg-red-800 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
-                    onClick={() => confirmarEliminarProducto(id)}
+                    onClick={() => confirmarEliminarProducto(id, imagen)}
                 >
                     Eliminar
                     <svg

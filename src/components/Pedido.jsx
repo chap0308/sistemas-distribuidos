@@ -6,14 +6,21 @@ const Pedido = ({ pedido }) => {
         cliente: { nombre, apellido, telefono, email },
     } = pedido;
     // console.log(pedido.detallePedido);
+    // console.log(pedido.detallePedido);
 
     return (
         <div
-            className={`mt-4 bg-gray-300 rounded-2xl p-6 md:grid md:grid-cols-2 md:gap-4 shadow-lg`}
+            className={`mt-4 last-of-type:mb-10 bg-gray-300 rounded-2xl p-6 md:grid md:grid-cols-3 shadow-lg`}
         >
-            <div>
-                <p className="font-bold text-red-700 text-2xl">
-                    Cliente: <span className=" text-black uppercase">{nombre} {apellido}{" "}</span> 
+            <div className="md:col-[1/2]">
+                <h2 className="font-bold text-xl text-cyan-700 mb-3">
+                    Código del Pedido: {id}
+                </h2>
+                <p className="font-bold text-red-700 text-xl">
+                    Cliente:{" "}
+                    <span className=" text-black capitalize">
+                        {nombre} {apellido}{" "}
+                    </span>
                 </p>
 
                 {email && (
@@ -66,24 +73,47 @@ const Pedido = ({ pedido }) => {
                 </select> */}
             </div>
 
-            <div>
+            <div className="md:col-[2/4] md:ml-8">
                 <h2 className="text-red-700 text-2xl font-bold mt-2">
                     Resumen del Pedido
                 </h2>
-                {pedido.detallePedido.map((articulo) => (
-                    <div key={articulo.id} className="mt-4">
-                        <p className="text-base text-black font-semibold">
-                            Producto: <span className="text-orange-600 uppercase">{articulo?.producto?.descripcion}{" "}</span> 
-                        </p>
-                        <p className="text-base text-black font-semibold">
-                            Cantidad: <span className="text-orange-600">{articulo?.cantidad}{" "}</span> 
-                        </p>
-                    </div>
-                ))}
+                <div className="md:grid md:grid-cols-3 ">
+                    {pedido.detallePedido.map((articulo, i) => (
+                        <div key={articulo.id} className="mt-4 flex justify-start gap-x-3">
+                            <div className="text-red-600 font-bold">
+                                <p>{i+1}.</p>
+                            </div>
+                            <div>
+                                <p className="text-base text-black font-semibold">
+                                    Producto:{" "}
+                                    <span className="text-orange-600 capitalize">
+                                        {articulo?.producto?.descripcion}{" "}
+                                    </span>
+                                </p>
+                                <p className="text-base text-black font-semibold">
+                                    Cantidad:{" "}
+                                    <span className="text-orange-600">
+                                        {articulo?.cantidad}{" "}
+                                    </span>
+                                </p>
+                                <p className="text-base text-black font-semibold">
+                                    Precio Unitario:{" "}
+                                    <span className="text-green-600">
+                                        {" "}
+                                        $ {articulo?.producto?.precio}{" "}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
 
-                <p className="text-gray-800 mt-3 font-bold ">
+                <p className="text-gray-800 mt-3 ml-3 font-bold ">
                     Total a pagar:
-                    <span className="font-bold text-green-600 text-lg"> $ {total}</span>
+                    <span className="font-bold text-green-600 text-xl">
+                        {" "}
+                        $ {total}
+                    </span>
                 </p>
 
                 <button

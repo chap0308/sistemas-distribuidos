@@ -9,6 +9,7 @@ import Link from "next/link";
 
 const NuevoProductoPage = () => {
     const [errorServidor, setErrorServidor] = useState("");
+    const [image, setImage] = useState(null);
 
     const router = useRouter();
 
@@ -17,7 +18,7 @@ const NuevoProductoPage = () => {
         handleSubmit,
         formState: { errors },
         reset,
-        setValue
+        setValue,
     } = useForm({
         //* para usar esto para un update
         defaultValues: {
@@ -28,18 +29,33 @@ const NuevoProductoPage = () => {
         },
         mode: "onBlur",
         reValidateMode: "onChange",
-
     });
 
+    //* Función para manejar la carga de la imagen, es muy útil
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const imageUrl = event.target.result;
+                setImage(imageUrl);
+            };
+            reader.readAsDataURL(file);
+        }
+        setImage(null)
+    };
+
     const onSubmit = handleSubmit(async (datos) => {
-        // console.log(datos.imagen[0])
-        // const file = datos.imagen[0]
+        // console.log(datos.imagen[0]);
+        const file = datos.imagen[0];
         // return
         // console.log(datos.imagen[0].name);
-        const { imagen, ...rest } =datos;
+        const { imagen, ...rest } = datos;
         rest.imagen = imagen[0].name;
-        // const formData = new FormData();
-        // formData.append('file', file)
+
+        const formData = new FormData();
+        formData.append('file', file)
+        
         try {
             // const config = {
             //     headers: {
@@ -47,19 +63,23 @@ const NuevoProductoPage = () => {
             //         "Content-Type": "application/json",
             //     }
             // }
-            // await uploadAxiosFromNext.post("/upload", datos, config);
+            //! no funciona con axios
+            // const resultadoA = await uploadAxiosFromNext.post("/upload", file);
+            // console.log(resultadoA);
 
-            // const response = await fetch("/api/upload",{
-            //     method: "POST",
-            //     body: formData,
-            //     headers: {
-            //         "Content-Type": "multipart/form-data",
-            //     },
-            // });
-            // const nuevosDatos = await response.json();
+            const response = await fetch("/api/upload",{
+                method: "POST",
+                body: formData,
+                //! no colocar
+                // headers: {
+                //     "Content-Type": "multipart/form-data",
+                // },
+            });
+            const nuevosDatos = await response.json();
+            // console.log(nuevosDatos);
+            
             const { data } = await clienteAxios.post("/productos", rest);
 
-            
             if (data) {
                 toast.success(
                     "Producto registrado correctamente, redireccionando...",
@@ -231,9 +251,23 @@ const NuevoProductoPage = () => {
                                     message: "La imagen es necesaria",
                                 },
                             })}
+                            onChange={handleImageChange}
                         />
-                        
-                        {errors.imagen && <span className="text-red-500 text-sm">{errors.imagen.message}</span>}
+                        {image && (
+                            <Image
+                                src={image}
+                                className="w-full h-[250px] object-cover mt-4 mx-auto"
+                                alt="Imagen seleccionada"
+                                width={100}
+                                height={100}
+                            />
+                        )}
+
+                        {errors.imagen && (
+                            <span className="text-red-500 text-sm">
+                                {errors.imagen.message}
+                            </span>
+                        )}
                     </div>
 
                     <button

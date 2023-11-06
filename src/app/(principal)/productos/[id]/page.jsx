@@ -10,6 +10,8 @@ import Link from "next/link";
 const PageIdProducto = ({ params: { id: idProducto } }) => {
     const [errorServidor, setErrorServidor] = useState("");
     const [datosForm, setDatosForm] = useState({});
+    const [imagenState, setImageState] = useState(null);
+    const [imagenActual, setImagenActual] = useState(null);
 
     useEffect(() => {
         const obtenerProductosById = async () => {
@@ -23,8 +25,11 @@ const PageIdProducto = ({ params: { id: idProducto } }) => {
                     `/productos/${idProducto}`,
                     config
                 );
-                // console.log(data);
-                setDatosForm(data);
+                const {imagen, ...rest} = data
+                // console.log(imagen);
+                setDatosForm(rest);
+                setImagenActual(imagen)
+                setImageState(`/uploads/${imagen}`)
                 
             } catch (error) {
                 console.log(error);
@@ -59,12 +64,51 @@ const PageIdProducto = ({ params: { id: idProducto } }) => {
         },
     });
     
+    //* Función para manejar la carga de la imagen, es muy útil
+    const handleImageChange = (e) => {
+        setValue("imagen", e.target.files)
+
+        const file = e.target.files[0];
+        // console.log(file);
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const imageUrl = event.target.result;
+                setImageState(imageUrl);
+            };
+            reader.readAsDataURL(file);
+        }
+        setImageState(null)
+    };
 
     const onSubmit = handleSubmit(async (datos) => {
+        const { imagen, ...rest } = datos;
+        
         try {
+            if(!imagen){
+                rest.imagen = imagenActual
+            }else{
+                rest.imagen = imagen[0].name;
+                const file = datos.imagen[0];
+                // console.log(datos.imagen);
+    
+                const formData = new FormData();
+                formData.append('file', file)
+                const response = await fetch(`/api/upload/${imagenActual}`,{
+                    method: "PUT",
+                    body: formData,
+                    //! no colocar
+                    // headers: {
+                    //     "Content-Type": "multipart/form-data",
+                    // },
+                });
+                const nuevosDatos = await response.json();
+            }
+            
+
             const { data } = await clienteAxios.put(
                 `/productos/${idProducto}`,
-                datos
+                rest
             );
             if (data) {
                 // setDatosForm({});
@@ -81,7 +125,7 @@ const PageIdProducto = ({ params: { id: idProducto } }) => {
                 }, 3000);
             }
         } catch (error) {
-            // console.log(error);
+            console.log(error);
             // console.log(error?.response?.data?.message);//!RESPUESTA DEL BACKEND
             if (error?.response?.data?.message) {
                 setErrorServidor(error?.response?.data?.message);
@@ -233,18 +277,15 @@ const PageIdProducto = ({ params: { id: idProducto } }) => {
                             aria-describedby="user_avatar_help"
                             id="imagen"
                             type="file"
-                            onChange={(e) => {
-                              //! el setValue permite darle un valor a una variable que exista(las variables que existen son los ...register("nombre"))
-                              setValue("imagen", e.target.files[0].name);
-                            }}
+                            onChange={handleImageChange}
                         />
-                        {datosForm.imagen && (
+                        {imagenState && (
                             <Image
-                                className="w-auto mx-auto py-4 md:pt-6 md:pb-0"
-                                src={`/img/${datosForm.imagen}`}
+                                className="w-auto mt-4 mx-auto"
+                                src={imagenState}
                                 alt="logo"
-                                width={80}
-                                height={80}
+                                width={100}
+                                height={100}
                             />
                         )}
 
@@ -259,7 +300,7 @@ const PageIdProducto = ({ params: { id: idProducto } }) => {
                         type="submit"
                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                        Crear Producto
+                        Actualizar Producto
                     </button>
                     {errorServidor && (
                         <p className="text-red-500 text-sm w-full text-center">

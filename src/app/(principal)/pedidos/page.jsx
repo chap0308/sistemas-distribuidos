@@ -99,7 +99,7 @@ const PedidosPage = () => {
             >
                 Nuevo Pedido
             </Link>
-            <div className="w-1/4">
+            <div className="w-2/3 md:w-1/4">
                 <Datepicker
                     options={{
                         language: "es",

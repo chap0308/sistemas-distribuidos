@@ -3,7 +3,7 @@ import { createContext, useState, useEffect, useReducer } from "react";
 // import { useRouter } from 'next/navigation'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import {authAxios, clienteAxios} from '@/config/clienteAxios'
+import {authAxios, clienteAxios, uploadAxiosFromNext} from '@/config/clienteAxios'
 import AlmacenReducer from './AlmacenReducer';
 
 import {
@@ -114,7 +114,7 @@ const AlmacenProvider = ({ children }) => {
     }
 
     //! SOLO USAR PARA CREAR LAS FUNCIONES DE LOS DIFERENTES MODULOS COMO CLIENTES, PRODUCTOS, ETC.
-    const confirmarEliminarProducto = id => {
+    const confirmarEliminarProducto = (id, imagen) => {
         MySwal.fire({
             title: "¿Deseas eliminar a este cliente?",
             text: "Esta acción no se puede deshacer",
@@ -132,6 +132,7 @@ const AlmacenProvider = ({ children }) => {
                             "Content-Type": "application/json",
                         }
                     }
+                    await uploadAxiosFromNext.delete(`/upload/${imagen}`);
                     // Eliminar por ID
                     await clienteAxios.delete(`/productos/${id}`,config);
                     
