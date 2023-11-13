@@ -116,7 +116,7 @@ const AlmacenProvider = ({ children }) => {
     //! SOLO USAR PARA CREAR LAS FUNCIONES DE LOS DIFERENTES MODULOS COMO CLIENTES, PRODUCTOS, ETC.
     const confirmarEliminarProducto = (id, imagen) => {
         MySwal.fire({
-            title: "¿Deseas eliminar a este cliente?",
+            title: "¿Deseas eliminar este producto?",
             text: "Esta acción no se puede deshacer",
             icon: "warning",
             showCancelButton: true,

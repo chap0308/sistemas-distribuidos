@@ -54,7 +54,7 @@ const NuevoPedidoPage = () => {
             }, 3000)
             return
         }
-        console.log("hola");
+        
         const productoId = productos.map((producto) => producto.id);
         const cantidad = productos.map((producto) => producto.cantidad);
         const precioUnitario = productos.map(
@@ -160,13 +160,13 @@ const NuevoPedidoPage = () => {
             <div className="flex justify-center mt-5">
                 <div className="w-full max-w-lg">
                     <AsignarCliente />
-                    <AsignarProductos />
+                    <AsignarProductos setMensajes={setMensajes} />
                     <ResumenPedido />
                     <Total />
 
                     <button
                         type="button"
-                        className={` bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900 ${validarPedido()} `}
+                        className={` bg-gray-800 w-full mt-5 p-2 mb-10 text-white uppercase font-bold hover:bg-gray-900 ${validarPedido()} `}
                         onClick={() => crearNuevoPedido()}
                     >
                         Registrar Pedido
