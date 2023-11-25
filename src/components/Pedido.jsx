@@ -9,6 +9,8 @@ const Pedido = ({ pedido }) => {
     // console.log(pedido.detallePedido);
 
     return (
+        // Codigo para validar que el objeto cliente exista
+
         <div
             className={`mt-4 last-of-type:mb-10 bg-gray-300 rounded-2xl p-6 md:grid md:grid-cols-3 shadow-lg`}
         >
@@ -135,6 +137,7 @@ const Pedido = ({ pedido }) => {
                 </button>
             </div>
         </div>
+        
     );
 };
 export default Pedido;

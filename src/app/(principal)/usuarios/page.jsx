@@ -28,7 +28,7 @@ const UsuariosPage = () => {
         <>
             <h1 className="text-2xl text-white font-bold mt-14">Usuarios</h1>
             
-            <div className="overflow-x-scroll md:overflow-hidden">
+            <div className="overflow-x-scroll md:overflow-hidden mb-12">
                 <table className="table-auto shadow-md mt-10 w-full w-lg ">
                     <thead className="bg-blue-800">
                         <tr className="text-white ">
